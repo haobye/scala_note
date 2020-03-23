@@ -1,0 +1,128 @@
+1.泛型
+	scala中的泛型可以作用在类,方法和函数上,泛型本身占位符没有任何意义。
+	只有当传入数据类型或参数时,当前的占位符才会有意义。
+	
+2.界定
+	在指定泛型时,可以对泛型进行范围界定,指定类型,而不是让其随意传入一个类型。
+	
+	对泛型进行限定：<T extends V>  <T super V>  
+	
+	[B<:A]：B类型上界时A类型；表示当前泛型类型必须是"某周类型的子类"或"某种类型"；
+			B是A的子类，或是A类型。
+	
+	[B>:A]：B类型下界时A类型；表示当前泛型类型必须是"某周类型"或"某种类型的父类"；
+			B是A类型，或是A的父类。
+	
+	[B<%A]：视界，表示B类型需要转换为A类型，需要提供一个隐式转换函数。
+	
+	[B:A]：上下文界定，其中A是一个泛型类，要求必须存在一个类型为A[B]的隐式值。
+		泛型 --> class A[T]{}
+		方法 --> def 方法名[B:A](b:B,a:A[B]){}
+		调用 --> 方法名(两个参数)
+
+	[-A,+B]：
+		-A 逆变：作为参数类型
+			指实现的参数类型是指定接口定义的参数类型父类 --> 可以传入父类和本身
+		+B 协变：作为返回值类型
+			指返回值类型是接口定义返回类型的子类 -->可以传入其子类和本身
+
+
+3.代码实现
+	1-基本代码
+	//泛型基本演示
+	class Teacher(val name:String,val age:Int,val faceValue:Int) extends Comparable[Teacher]{
+		//当前对象 - 传入对象 升序
+		//传入对象 - 当前对象 降序
+		//有compareTo方法 即实现了Comparable接口 可以直接调用
+		override def compareTo(o: Teacher): Int = {
+			this.faceValue - o.faceValue
+		}
+	}
+	object GenericityDemo1 {
+		def main(args: Array[String]): Unit = {
+			val t1 = new Teacher("liangshu",37,90)
+			val t2 = new Teacher("laochen",45,50)
+			//存储到一个集合中
+			val arr = Array(t1,t2)
+			val sorted: Array[Teacher] = arr.sorted
+			println(sorted(0).name)
+	}
+
+	2-上界
+	//颜值
+	//颜值相当就比较年龄
+	class Girl(val name:String,val faceValue:Int,val age:Int) extends Comparable[Girl]{
+		override def compareTo(o: Girl): Int = {
+			if (this.faceValue == o.faceValue){
+				o.age - this.age //升序 从小到大
+			}else {
+				this.faceValue - o.faceValue //降序 从大到小
+			}
+		}
+	}
+	//上界 通用方法 这个方法可以帮助选择
+	class UpperBoundsDemo[T <: Comparable[T]] {
+		def xz(first:T,second:T) ={
+			if(first.compareTo(second) > 0) first else second
+		}
+	}
+	object UpGirl {
+		def main(args: Array[String]): Unit = {
+			val ubd = new UpperBoundsDemo[Girl]
+			val g1 = new Girl("bingbing",85,19)
+			val g2 = new Girl("yuanyuan",85,age = 20)
+			val girl = ubd.xz(g1,g2)
+			println(girl.name)
+		}
+	}
+
+	3-下界
+	class Boy(val name:String,val faceValue:Int,val age:Int) {}
+	// 视界 选择
+	//Ordered是Scala中提供的一个特质,作用是一个比较 -->相当于Java中Comparable接口
+	//Ordering是cala中提供的一个特质,作用是一个比较 -->相当于Java中Comparator接口
+	class ViewBoundsDemo[T <% Ordered[T]] {
+		def xz(first:T,second:T)={
+			if(first.compareTo(second)>0) first else second
+		}
+	}
+	//实现隐式转换函数
+	object MyPredef {
+		implicit val boySelect=(boy:Boy)=>new Ordered[Boy]{
+			override def compare(that: Boy): Int = {
+				if (boy.faceValue == that.faceValue){
+					boy.age - that.age //升序 从小到大
+				}else {
+					that.faceValue - boy.faceValue //降序 从大到小
+				}
+			}
+		}
+	}
+	object BoyDemo {
+		//视界的实现
+		def main(args: Array[String]): Unit = {
+			val b1 = new Boy("laochen",50,60)
+			val b2 = new Boy("laocao",51,31)
+			//告诉编译器需要去烧苗隐式转换函数
+			import MyPredef._
+			val vbd = new ViewBoundsDemo[Boy]
+			val boy = vbd.xz(b1,b2)
+			println(boy)
+		}
+	}
+	//上下文界
+	// 上下文界中有一个特殊的参数 classTag 相当于动态传入, 你传入的是什么类型使用就是什么了类型
+	class Person[T:Ordering](val first:T,val second:T) {
+		//当前定义的方法必须存在一个Ordering的类型 这个类型需要是一个隐式值Ordering[T]
+		def xz(implicit ord : Ordering[T])={
+		//自动排序
+			if(ord.compare(first,second) < 0 ) first else second
+		}
+	}
+	object Test{
+		def main(args: Array[String]): Unit = {
+			val p = new Person(1,2)
+			println(p.xz)
+		}
+	}
+

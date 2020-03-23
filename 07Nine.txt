@@ -1,0 +1,19 @@
+//正向乘法表
+object Nine{
+	def main(args:Array[String]):Unit = {
+		for(m <- 1 to 9; n <- 1 to m){
+			if(m == n){println(n+"*"+m+"="+(m*n)+" ")}
+			else print(n+"*"+m+"="+(m*n)+" ")
+		}
+	}
+}
+
+//倒向乘法表
+/* object Nine{
+	def main(args:Array[String]):Unit = {
+		for(m <- 1 to 9; n <- m to 9){
+			if(m == 9){println(m+"*"+n+"="+(m*n)+" ")}
+			else print(m+"*"+n+"="+(m*n)+" ")
+		}
+	}
+} */

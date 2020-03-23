@@ -1,0 +1,60 @@
+object ZuoYe{
+	def main(args:Array[String]):Unit = {
+		//创建一个list集合
+		val list1 = List(1,2,3,4,5,6,7)
+		
+		//将list1中的每个元素乘以2生成一个新集合
+		val list2:List[Int] = list1.map((x:Int) => x*2)  //list1.map(_ * 2)
+		
+		//将list1中的偶数取出生成一个新集合
+		val list3:List[Int] = list1.filter(x => x%2==0)  //list1.filter(_%2==0)
+		
+		//将list1排序生成一个新集合
+			//sorted   默认升序
+			//sortwith 使用大于小于号自定义升序降序
+			//sortBy   可以传入参数进行排序
+		val list4:List[Int] = list1.sorted
+		
+		//每四个元素分成一组
+			//groupBy  使用在元组上，相同的key为一组做操作
+		val list5:Iterator[List[Int]] = list1.grouped(4)
+		while(list5.hasNext()){
+			println(list5.next())
+		}
+		
+		//将生面获取的Iterator转换为list
+		val list6:List[List[Int]] = list5.toList	
+		
+		//将集合中的数据扁平化
+		val list7:List[Int] = list1.flatten
+		
+		//将下面的集合中的数据进行扁平化
+		val lines = List("hello how are you","My name is jane")
+		val list8:List[Int] = lines.flatMap(_.split(" "))
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}
+}

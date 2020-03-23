@@ -1,0 +1,64 @@
+
+1.方法转换为函数
+    scala> def m(x:Int,y:Int) = x*y
+    m: (x: Int, y: Int)Int
+
+    scala> val f = m _
+    f: (Int, Int) => Int = <function2>
+
+
+2.集合中的每一个元素
+    scala> val list = List(1,2,3,4)
+    list: List[Int] = List(1, 2, 3, 4)
+
+    scala> val list2 = list.map(_ * 5)
+    list2: List[Int] = List(5, 10, 15, 20)
+
+
+3.获取元组tuple中的元素
+    scala> val t = ("hadoop", 3.14, 100)
+    t: (String, Double, Int) = (hadoop,3.14,100)
+
+    scala> t._1
+    res1: String = hadoop
+    scala> t._3
+    res3: Int = 100
+
+
+4.模式匹配
+    scala> val word = "hadoop"
+    word: String = hadoop
+
+    scala> var res = word match{case "hadoop"=>1 case "spark"=>2 case _ => 0}
+    scala> var res = word match{
+        | case "hadoop" => 1
+        | case "spark" => 2
+        | case _ => 0           //以上都没有匹配时才会被执行
+        | }
+    res: Int = 1
+
+
+5.队列
+    scala> val list = List(1,2,3)
+    list: List[Int] = List(1, 2, 3)
+
+    scala> list match{
+        | case List(_,_*) => 1
+        | case _ => 2
+        | }
+    res4: Int = 1
+
+
+6.导包引入
+    scala> import scala.collection.mutable._
+    import scala.collection.mutable._
+    作用和python,Java中的*一致。
+
+	
+7.初始化变量
+    scala> var name:String=_
+    name: String = null
+    
+    scala> var age:Int=_
+    age: Int = 0
+    即string类型有个默认null的值，int类型有个默认0的值

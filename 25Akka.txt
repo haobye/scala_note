@@ -1,0 +1,68 @@
+1.Akka
+	Akka是spark中提供的通信模型。
+	Akka特点:高可靠.,高性能,高容错,可扩展的分布式RPC功能
+	所有的通信模型都是基于Actor。
+	spark里的角色有两个:master和worker，集群先启动master，然后再启动worker，
+		worker需要向master进行注册，master将注册信息存储到磁盘和内存，向worker
+		发送注册成功，然后两者开始保持心跳。
+
+		
+2.Akka中的API
+	ActorSystem对象：单利对象,可以调用ActorSystem来创建Actor。
+	preStrat方法：在Actor对象构造之后执行,receice方法之前执行,只会执行一次。
+			进行消息的一些收发或是一些变量的初始化
+	receive方法：在preStrat方法之后执行,可以不停的执行,进行消息的收发。
+
+
+3.简单的Demo		
+	需求:
+	1-Worker请求Master.把请求消息封装样例类中并序列化,然后发送Master
+	2-Master端接收Worker信息,开始反序列,调用模式匹配,执行相应的逻辑
+	3-把执行后的结果数据响应给worker端
+
+		
+4.Master和Worker(Akka通信)
+	Master和Worker的启动流程
+	1-启动Master在启动一定时检查超时worker的定时器如果有超时的worker将其删除
+	2-启动Worker,启动后会向Master发送注册信息
+	3-Master接收到Worker的注册信息后进行保存,然后把MasterURL发送给Worker
+	4-Worker接收到MasterURL后并保存,开始定时向Master发送心跳信息
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+

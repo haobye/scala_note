@@ -1,0 +1,38 @@
+
+1.变量和常量(var和val)
+	①Scala中不要明确表示数据类型，会自动进行推断(隐式转换)。
+	②val可以看作是java中final修饰一个常量；使用val修饰不能不赋值；
+	 默认匿名变量使用val修饰；不能改其引用内存地址，可改引用的对象内部的其他值。
+	③var可以看作是java中的一个变量。(较少用变量)
+	④因为在网络传输中，会对变量进行序列化和反序列化，var修饰的变量
+	 可能发生值的改变，数据传输错误或不安全，一般使用val保证安全。
+
+2.声明方式	
+	隐式声明：val name = "mail"
+	显示声明：val name:String = "mack"
+	同时多个声明：val name1,name2 = "mail"[,"mack"]
+	
+3.基本数据类型
+	Byte,Char,Short,Int,Long,Float,Double,Boolean
+	对象本身会有方法(函数),通过当前数值进行调用。
+		例子: val stringAge:String = 1.toString
+	提供一个加强版的基本数据类型[Rich基本类型的名字]。
+	--> RichInt,RichDouble,RichFloat
+		隐式类型转换，先将Int类型转为RichInt，再调用器中的方法。
+	scala中没有++和--，可以使用+=和-+。
+	scala中提供运算符重载实现运算符的功能。
+		例子：val res = 1+1		val r2 = 1.+(1)
+		
+4.
+	Object ValAndVar{
+		def main(args: Array[String]): Unit = {	
+		}
+	}	
+	-List : 集合
+	-Unit : 相当于Java中的void，表示无返回值
+	-option : 选择类型
+	-YourClass : 自己定义的类
+	-AnyVal : 非引用数据类型()
+	-Nothing : 是所有类的子类
+	-Null : 是引用数据类型的子类
+	-在scala中, 一切都是类, 没有基础类型和包装类之分

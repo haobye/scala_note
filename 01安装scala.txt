@@ -1,0 +1,54 @@
+1.安装
+    使用scala-2.10.6.msi安装工具，默认安装
+    配置SCALA_HOME为C:\Program Files (x86)\scala的系统环境变量
+    再将路径C:\Program Files (x86)\scala\bin添加到path环境变量中
+
+
+2.验证
+    在cmd中输入scala -version即可查看其版本
+    输入scala进入交互式模式，出现scala>即为安装成功
+
+
+3.scala解释器
+    REPL -> R(取值) -> E(求值) -> P(打印) -> L(循环)
+    快速编译scala代码成为字节码文件，然后交给JVM来执行。
+
+
+4.编写实现scala代码
+    4.1新建一个.scala文件并写入代码。
+        object Hello{
+            def main(args:Array[String]){
+                print("hello word!!!")
+            }
+        }
+        注意：代码中的object和Java中Object完全不一样，
+            object具有static属性，执行代码必须卸载object中并且提供main方法。
+    4.2编译
+        scalac Hello.scala
+        在同级目录下会出现Hello.class和Hello$.class文件
+    4.3运行
+        scala Hello
+    4.4查看.class源码文件的工具：jd-gui.exe
+    
+
+5.使用IDEA作为Scala开发工具
+    5.1下载插件
+        在 http://plugins.jetbrains.com/ 中搜索Scala，找到对应IDEA的版本下载
+    5.2配置插件
+        File-->Settings-->Plugins-->Install Plugins from disk(即磁盘安装)
+        安装完成后重启即可
+    5.3第二种插件安装方法
+        将scala-intellij-bin-2018.2.4.zip解压后拷贝到IDEA/plugins的目录下，同样要重启
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,21 @@
+1.多种输出方式	
+	object PrintDemo extends App{   //可继承app这个类
+		val name = "好"
+		val price = 1000000.1d      //表示double类型
+		val url = "www.baidu.com"		
+			//①普通输出，和java中一样
+		println("name="+name+"price="+price)
+			//②格式化输出，类似java中的string
+		printf("名称：%s，估值：%.2f",name,price)
+			//③使用s生成一个字符串
+		println(s"名称是$name,价格是$price")
+			//④使用${}完成计算
+		println(s"1+1的结果是${1+1}")
+	}
+	
+2.输入获取
+	println("请输入：")
+	val str:String = readLine()  //ctrl+alt+v生成返回值
+	println(str)
+	
+	

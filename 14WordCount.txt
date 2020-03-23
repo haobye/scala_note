@@ -1,0 +1,16 @@
+object WordCount{
+	def main(args:Array[String]):Unit = {
+		//准备数据
+		var lines = List("hello hadoop hello scala","hello spark")
+		//遍历集合数据并扁平化处理
+		val words:List[String] = lines.flatMap(_.split(" "))
+		//在每个单词后面添加1 (单词,1)
+		val tuples:List[(String,Int)] = words.map((_,1))
+		//将相同的key进行分组
+		val grouped:Map[String,List[(String,Int)]] = tuples.groupBy(x => x._1)
+		//统计计数
+		val sumed:Map[String,Int] = grouped.map(x => (x._1,x._2.length))		
+		//对数据进行排序
+		val sorted:List[(String,Int)] = sumed.toList.sortBy(_._2).reverse		
+	}
+}

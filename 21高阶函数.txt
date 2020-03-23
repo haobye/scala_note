@@ -1,0 +1,70 @@
+1.高阶函数
+	参数和返回值都是函数。
+	//传入参数是函数；
+		val arr = Array(1,2,3,4)
+		val fun = (x:Int) => x*2
+		val res = arr.map(fun)
+	//传入匿名函数；
+		val res2 = arr.map((x:Int) => x*2)
+		val res3 = arr.map(_*2)
+	//返回值是函数
+		def urlBuilder(flag:Boolean,name:String):(String,String)=>String={
+			val res = if(flag) "https://" else "http://"	
+		}
+		
+		
+2.闭包
+	闭包是一个函数,返回值依赖于函数外部的一个或多个变量。
+	闭包通常来讲,可以简单的认为是可以访问一个函数里边的局部变量或另外一个函数。
+		var num = 5	
+		val res = (x:Int) => {
+			num += 5
+			x*num
+		}
+		println(num)	//5
+		println(res(4))  //40
+		println(num)	//10	
+			
+		
+3.柯里化		
+	柯里化就是把接收多个参数的函数变成接收单一参数的函数，返回一个接收余下参数的新函数。
+		//创建一个普通函数
+		def add(x:Int,y:Int) = x+y
+		println(add(1,2)
+		//柯里化后的方法
+		def add(x:Int)(y:Int) = x+y
+		println(add(1)(2))
+		//implicit关键字进行隐式转换
+		def add(x:Int)(implicit y:Int=3) = x+y
+		println(add(4))
+		
+		//模拟柯里化的实现过程
+		def first(x:Int) = (y:Int) => x+y
+		val second = first(1)
+		val res = second(2)
+		println(res)
+		
+		//现阶段柯里化的应用有fold和map
+		val list = List(1,2,3)
+		println(list.foldLeft(0)(_+_))
+		
+		
+4.方法的嵌套(阶乘)
+	def fatorial(x:Int):Int = {
+		def fact(x:Int,num:Int):Int = {
+			if(x<=1) num
+			else face(x-1,x*num)
+		}
+		fact(x,1)
+	}
+	println("5的阶乘为："+factorial(5))
+
+
+5.多态
+	def makeList[A](x:A,length:Int):List[A] = {
+		if(length<1) null
+		else x::makeList(x,length-1)
+	}
+	println(makeList("aa",3))	//List(aa,aa,aa)
+	println(makeList(5,4))      //List(5,5,5,5)
+

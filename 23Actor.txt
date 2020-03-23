@@ -1,0 +1,121 @@
+1.Actor
+	是一个并行计算模型，运用信息和邮箱通信。基于线程、基于事件的任务调度。
+		并行: 同一时间点 多个线程一起执行
+		并发: 同一时间段 多个线程一起执行
+	接收消息：mailbox；
+	处理消息：创建新的actor；指定下一个消息的处理；给其他actor发送消息。
+		
+		
+2.特点
+	1-actor数据不能共享。
+	2-没有锁的概念，不存在死锁问题。
+	3-actor之间通过信息进行通信。
+
+
+3.发送消息的三种方式	
+	1-! 发送异步消息,无返回值
+	2-!? 发送同步消息,有返回值,需要进行线程等待
+	3-!! 发送异步消息,有返回值,返回值使用Future[Any]接收
+	
+
+4.异步和同步
+	1-同步调用的时候会等待响应会返回值,若没有响应会返回值,就会阻塞线程,不继续执行。
+	2-异步调用就是单独的进行一个线程执行,原始线程启动异步调用,异步调用会调用另外一个线程执行请求, 
+		原始线程不会等待这个异步线程,彼此之间是同时执行,只需异步执行完成后通知即可。
+
+
+5.开启Actor
+	Actor执行顺序:
+		1-调用start方法来启动Actor
+		2-执行Actor中act方法
+		3-向Actor发送信息(打印)
+
+	object ActorDemo1 {
+		def main(args: Array[String]): Unit = {
+			//启动Actor
+			MyActor.start()
+		}
+	}
+	import scala.actors.Actor
+	object MyActor extends Actor{
+		//act相当于Actor中的执行方法
+		override def act(): Unit = {
+			for (i <- 1 to 10){
+				//打印值
+				println("actor"+i)
+				//做延迟, 防止开始即结束
+				Thread.sleep(1000)
+			}
+		}
+	}
+	
+
+6.使用消息发送机制发送消息
+	import scala.actors.Actor
+	object MyActor2 extends Actor{
+	  override def act(): Unit = {
+		//死循环
+		while(true){
+		  //接收数据
+		  receive{
+			//类似于偏函数的形式
+			//因为需要传递信息,可能会包含着一些数据,使用偏函数最合理,因为可以匹配消息类型
+			//既然可以获取消息数据(即传递过来的信息),所以使用样例类最合理
+			case  AsyncMsg(id, msg) =>{
+			  //接收异步消息
+			  println("id: "+id+"   msg: "+msg)
+			  //接收到信息之后的回传信息
+			  //异步发送不需要返回值(已经接收到信息, 无需返回)
+			  sender ! ReplayMsg(0,"success")
+			}
+			case SyncMsg(id,msg)=>{
+			  //接收异步消息
+			  println("id: "+id+"   msg: "+msg)
+			  //接收到信息之后的回传信息
+			  //异步发送不需要返回值(已经接收到信息, 无需返回)
+			  sender ! ReplayMsg(1,"success")
+			}
+		  }
+		}
+	  }
+	}
+
+	//创建异步消息样例类
+	case class AsyncMsg(id:Int, msg:String)
+	//同步
+	case class SyncMsg(id:Int,msg:String)
+	//回传信息使用的样例类(异步或同步发送的时候会有返回值, 所以定义一个类进行消息发送)
+	case class ReplayMsg(id:Int,msg:String)
+
+	import scala.actors.Future
+
+	object ActorDemo2 {
+	  def main(args: Array[String]): Unit = {
+		//启动Actor同时可以获取Actor对象
+		//获取Actor目的就是为了发送消息
+		val actor = MyActor2.start()
+		//1. 发送异步消息无返回值
+		actor ! AsyncMsg(1,"发送异步消息无返回值")
+		//因为没有返回值, 所以只能自行打印
+		println("异步发送消息, 没有返回值")
+
+		//2. 发送同步消息, 有返回值, 会等待线程
+		val value: Any = actor !? SyncMsg(2,"发送同步消息, 有返回值")
+		println("同步消息发送完成")
+		println(value)
+		
+		//3. 发送异步消息, 有返回值, 返回值是Any类型
+		val values: Future[Any] = actor !! AsyncMsg(3,"异步消息,有返回值")
+		//休眠一下
+		Thread.sleep(1000)
+		//判断是否有数据
+		if(values.isSet){
+		  //取出数据
+		  val applyMsg: Any = values.apply()
+		  println(applyMsg)
+		}else{
+		  println("Nothing")
+		}
+	  }
+	}
+

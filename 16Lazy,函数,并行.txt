@@ -1,0 +1,75 @@
+1.Lazy关键字
+	添加到变量之前，做到延迟加载，只有调用的时候才会执行计算。
+	类似于单例中的懒汉模式--> 不调用方法之前对象是不存在的。
+		1-构造方法私有化(无参)
+		2-创建一个静态私有变量数据类型是当前类的数据类型且不进行初始化
+		3-提供一个公有静态的获取当前对象的方法
+		4-进行判断, 若当前对象没有被创建, 创建对象, 否则返回
+	
+	object LazyDemo extends App {
+	  def init():String={
+		println("初始化方法")
+		"测试"
+	  }
+	  lazy val method = init()  //有无lazy关键字,结果不同
+	  println("初始化方法调用之后")
+	  println(method)
+	}
+	
+	
+2.并行化	
+	通过par开启多个线程同时进行计算(开启多线程)
+	* spark代码的使用本地执行setMaster("local")
+	* local---开启一个线程；
+	* local[2]---模拟spark并行化处理(开启两个线程),最好小于当前电脑空余线程的个数；
+	* local[*]---有多少线程就用多少线程。
+
+	
+3.函数sum
+	遍历集合,将集合中的数据进行相加求和。
+	//求和(聚合)
+	val arr = Array(1,2,3,4,5,6,7,8)
+	val sumed:Int = arr.sum
+	//并行化处理求和(多个线程同时计算，最后汇总)
+	val sumed2:Int = arr.par.sum
+
+	
+4.函数reduce
+	聚合函数,需要传入一个能计算集合中数据的函数作为参数,默认reduce会获取集合中元素的数据类型,
+		作为其泛型的数据类型。求和可以使用并行化,但是**求差值的时候不能使用并行计算**。
+		reduceLeft,reduceRight：正向相加，反向相加
+	//单线程
+	val sumed3 = arr.reduce(_+_)
+	//reduce并行化
+	val sumed3 = arr.par.reduce((x:Int,y:Int)=>x+y)
+	val sumed3 = arr.par.reduce(_+_)
+	
+	//reduce也可求差值
+	val sumed3 = arr.reduce(_-_)
+	//求差的并行化处理，结果就不一定了，所以不要使用
+
+	//reduceLeft是reduce的变种,处理函数是相同的,添不添加并行都一样
+		//这个求差值的时候可以使用并行化
+	val sumed4 = arr.par.reduceLeft(_-_)
+
+	//和reduceLeft相似,reduceRight反向进行运算,从右向左加
+	val sumed5 = arr.par.reduceRight(_+_)
+
+	
+4.函数fold
+	折叠,可以聚合,初始值(无特定顺序)
+	需要传入两个参数, 第一个是初始化值, 第二个是计算规则。
+	//若是不开启并行化,最终就是初始值加计算结果
+	val sumed5 = arr.fold(0)(_+_)
+	//若开启并行化,每个线程都会加一遍初始值
+	val sumed6 = arr.par.fold(10)(_+_)
+	
+	//有初始值有特定顺序(相当于单线程)
+	val sumed7 = arr.par.foldLeft(10)(_+_)
+	val sumed8 = arr.par.foldRight(10)(_+_)
+	
+
+5.函数aggregate	
+	初始值,局部聚合,全局聚合
+	arr.aggregate(0)(_+_,_+_)
+	

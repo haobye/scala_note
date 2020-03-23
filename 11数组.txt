@@ -1,0 +1,94 @@
+1.Scala中的数组分为可变数组和不可变数组。
+	默认情况下所有数组都是不可变的。
+		immutable不可变(默认导入)
+	可变数组需要手动导入：
+		import scala.collection.mutable.ArrayBuffer
+	
+2.数组的定义
+	//长度不可变，内容可变
+	var arr:Array[Int] = new Array[Int](3)
+	//简写 
+	var arr1 = new Array[Int](3)
+	//常用形式：长度不可变，内容可变
+	val arr2 = Array(1,2,3,4)
+
+3.修改内容
+	arr2(0) = 100
+	
+4.打印
+	打印的时候需要注意：不可变数组无法直接输出。
+		(不能打印内部元素，只能输出地址)
+	将不可变数组转换为可变数组才能直接看到内容。
+		println(arr2.toBuffer)
+
+5.遍历数组
+	for(i <- 0 Until arr2.length){
+		println(arr2(i))
+	}
+	
+6.排序(sorted有返回值)
+	val arr3 = arr2.sorted
+	println(arr3.toBuffer)
+	//降序 
+	arr2.sorted.reverse
+	
+	
+==========↑↑↑不可变↑↑↑==========↓↓↓可变↓↓↓==========
+	
+	
+7.可变数组
+	import scala.collection.mutable.ArrayBuffer
+	val arr4 = new ArrayBuffer[Int](4)
+	
+8.添加元素
+	arr4 += (1,2,3,4,5,8)
+	将不可变数组添加到可变数组中：
+		arr4 ++= arr3
+	
+9.在指定位置插入元素	
+	//第一个参数是下标，后续是要加入的元素
+	arr4.insert(0,4)
+	arr4.insert(0,3,-4,9)
+	
+10.删除元素
+	arr4 -= 1
+	println(arr4)
+	
+11.删除指定位置的元素
+	//第一个参数是下标，第二个是删除个数
+	arr4.remove(0)
+	arr4.remove(0,3)
+	
+12.排序-sortWith
+	//若是<就是升序排列
+	val arr5:ArrayBuffer[Int] = arr4.sortWith(x:Int,y:Int)=>x<y)
+	//简化(下划线代替形参)
+	val arr5_1:ArrayBuffer[Int] = arr4.sortWith(_<_)
+	println(arr5_1)
+	
+	
+==========↓↓↓常用函数↓↓↓==========↓↓↓常用函数↓↓↓==========	
+	
+	
+1.介绍
+	map遍历集合数组得到返回值；
+	foreach遍历集合数组的值打印(无返回值)；
+	filter遍历集合数组过滤得到返回值。
+
+2.map	
+	//数组数据
+	val words = Array("hello xiaoming hello scala","byebye spark")	
+	//数组中储存一个数组
+	val splitWord:Array[Array[String]] = words.map((wd:String)=>wd.split(""))
+	//将数据扁平化处理，将储存的数组取出并做一个合并
+	val flattenWord:Array[String] = splitWord.flatten
+	printtenln(flattenWord.toBuffer)
+	
+3.flatMap
+	常用函数 等价于首先Map再Faltten 遍历集合数组并操作 得到返回值
+	val faltenWord:Array[String] = words.flatMap((wd:String)=>wd.split(" "))
+	//简化1：因为调用flatmap时已知数组元素类型，所以只写形参即可。
+	val fw:Array[String] = words.flatMap(wd => wd.split(" "))
+	//简化2：已知元素类型，每次只有一个元素被操作，可使用_代替。
+	val fw:Array[String] = words.flatMap(_.split(" "))
+	

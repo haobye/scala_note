@@ -1,0 +1,93 @@
+1.分支if
+	object IfDemo{
+		/*
+		java中有?:(三目运算符)，但必须有返回值。
+			Scanner sc = new Scanner(System.in);
+			int input = sc.nextInt();
+			int age = input > 50 ? 100 : 101;
+		*/
+		def main(args:Array[String]):Unit = {
+			//scala中的if自带返回值
+			val scn = 88
+			val age = if(scn > 50) 100 else 101
+			
+			//标准写法if(表达式){}
+			val age2 = if(scn > 50){
+				1010
+				100     //最后一个值作为返回
+			}
+			
+			//若所有条件写在一行则使用;分号隔开
+			var a,b,c = 0
+			if(a<10){b=b+1;c=c+1}
+			//若返回数据类型不一致，取其父类Any
+			val res:Any = if(a<10) "谁" else 111
+		}
+	}
+	
+	
+2.循环for(类似java中的增强for)
+	object LoopDemo{
+		def main(args:Array[String]):Unit = {
+			//定义一个数组，后面为初始元素
+			val array = Array(1,2,3,4)
+			for(ele <- array){
+				println(ele)
+			}
+			
+			//0 to 5 会得到一个范围(0,5都含有)
+			for(item <- 0 to 5){
+				println(item)
+			}
+			
+			//0 until 5 也有一个范围(不含有5)(until从…到…为止)
+			for(i <- 0 to 5){
+				println(i)
+			}
+			
+			//守卫，添加一个条件
+			for(e <- array if e%2==0){
+				println(e)
+			}
+			
+			//可以双重for循环
+			for(m <- 1 to 3){
+				for(n <- 1 until 3){
+					println(m+"**"+n)
+				}
+			}
+			//双重的变形
+			for(m <- 1 to 3 ; n <- 1 until 3){
+				println(m+"**"+n)
+			}
+			
+			//for循环推导式，加入yield写法推到一个集合
+			val res = for(i <- 1 to 10) yield i
+			
+			//foreach遍历集合数组，没有返回值，只能打印
+			array.foreach(x => println(x))
+			array.foreach(println)
+			/* map遍历函数与foreach一样，但有返回值。
+				第一个x是 当前数组中要遍历的元素
+				  =>   是 语法格式
+				第二个x是 函数的实现体
+				使用toBuffer可以查看数组，否则是地址
+			*/
+			println(array.map(x => x).toBuffer)
+		}
+	}
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+	

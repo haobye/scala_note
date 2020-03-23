@@ -1,0 +1,116 @@
+1.option类型
+	用来表示可能有值,也可能没有值。
+	分别有两个子类：Some,None。
+	
+	//option参数相当于一个元组
+	val op:Option[(String,Int,Boolean)] = Some("hao",18,true)
+	//map取值可以使用get/getOrElse
+	//若操作option，就使用getOrElse
+	val value:[String,Int,Boolean] = op.getOrElse(null)
+		
+	//使用getOrElse更好
+	val map = Map(("xiaoli", 16), ("xiaozhang", 23), ("xiaosong", 43))
+	val v: Option[Int] = map.get("xiaoli")
+	v match {
+		case Some(a) => println(a)
+		case None => println("没有值")
+	}
+	
+
+2.偏函数(形式是偏方法)
+	方法体放在{}内,没有match关键字,实现体有case,这样的方法就是偏函数。
+		def 方法名(参数列表): 返回值类型 {
+			case 条件 => 逻辑
+			case ……
+		}
+
+	//普通模式(不使用偏函数也可完成)
+	def m1(num:String):Int = num match{
+		case "one" => 1
+		case "two" => 2
+		case _ => -1
+	}
+
+	//简化,偏函数(固定名字PartialFunction)
+	//第一个数据类型是参数,即匹配条件的数据类型
+	//第二个数据类型是返回值类型的数据类型,即得到的结果
+	def m2:PartialFunction[String,Int] = {
+		case "one" => 1
+		case "two" => 2
+		case _ => -1
+	}
+	//调用
+	def main(args:Array[String]):Unit = {println(m2("one"))}
+	
+	
+3.四种创建线程池方法(Java文件中写)
+	
+	1-创建固定大小的线程池。
+		//建议获取当前资源线程数来决定线程池的大小。
+		int i = Runtime.getRuntime().availableProcessors();
+		ExecutorService threadPool = Executors.newCachedThreadPool();
+	 
+	2-创建可缓存的线程。
+		//如果线程长度超过了处理需求,可以灵活的回收空闲线程,若没有后台线程会自动创建。
+        //线程池是无限大的,当执行第二个任务的时候,若第一个任务已经执行完成,
+		//	会重复使用第一个执行任务的线程,不会再重新创建。
+        ExecutorService threadPool = Executors.newCachedThreadPool();
+			//关闭线程池(一般不做)  //threadPool.shutdown();
+	
+
+4.获取线程中的数据	
+	public class FutureDemo {
+		public static void main(String[] args) {
+			ExecutorService threadPool = Executors.newCachedThreadPool();
+			//获取数据：Future相当于是一个容器,可以封装获取的数据
+			Future<String> future = threadPool.submit(new Callable<String>() {
+				//和线程创建中的run方法类似
+				@Override
+				public String call() throws Exception {
+					System.out.println("Thread Name is " + Thread.currentThread().getName() + "\nThread ID is " + Thread.currentThread().getId());
+					System.out.println("正在获取数据");
+					System.out.println("正在读取数据");
+					Thread.sleep(1000);
+					System.out.println("读取完毕");
+					return "success";
+				}
+			});
+
+			//主线程需要睡眠, 否则会直接执行到最后, 导致get获取的时候没有值
+			try {
+				Thread.sleep(2000);
+				if (future.isDone()) {
+					//get方法如果获取到异常会被捕获
+				} else {
+					System.out.println("没有值");
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

@@ -1,0 +1,76 @@
+1.函数声明
+	函数一般是写在方法体内部的
+	val 函数名 = (参数列表) => {函数体}
+
+2.方法和函数的区别
+	在scala中函数作为参数的形式传递到方法中，
+	也就是说定义方法的时候可以使用函数做方法的参数，
+	并将函数传递到方法体中。
+	
+3.例如
+	有参数：
+		val f = (x:Int,y:Int) = {x*y}
+		def show(f:(Int,Int) => Int):Unit = {}
+	没有参数：
+		val f2 = () => 10*10
+		//f2:() => Int
+	匿名函数：
+		//一般在方法中函数传递时使用。
+		val arr = Array(1,2,3,4,5)
+		
+		//函数 filter 过滤 获取返回true的值。
+		println(arr.filter((x:Int) => {x%2==0}).toBuffer)
+	
+		//函数 map 遍历集合数组 取出元素计算。
+		val f = (x:Int) => x * 2 
+		val res = arr.map(f)
+		println(res.toBuffer)
+		
+		
+4.函数的另一种定义方式	
+	val 函数名:(参数数据类型)=>返回值类型 = {(形参名)=>函数体}
+		等号左边：相当于声明函数，执行参数的数据类型和返回值的类型。
+		等号右边：相当于实现函数，需要知道函数的形参名和具体实现方式。
+	val f:(Int,Int)=>Int = {(x,y)=>x*y}
+	
+5.简化
+	//只有一个参数一个返回值
+	val f:(Int) => Int = i => i
+	//无参无返回值
+	val f:() => Unit = () => println("没啥")
+	
+	
+6.方法可以转化为函数
+	1.显式转换
+		val arr = Array(1,2,3,4,5)
+		def m1(a:Int) = {a*2}
+		//使用“方法名+空格+下划线”转换为函数
+		val f = m1 _
+		val res = arr.map(f).toBuffer
+		
+	2.隐式转换(系统自动完成)
+		val res = arr.map(m1).toBuffer
+
+
+7.可变参数
+	形参名:数据类型*。可以当作数组来处理。
+	只能使用一个可变参数，并且必须在最后一个。
+	def m2(a:String*) = {
+		for(p<-a){
+			println(p)
+		}
+	}
+	m2("哈哈","呵呵","嘿嘿")
+	
+8.默认参数值
+	def m3(a:Int=1, b:Int=3){a+b}
+	//因为有默认值可以直接调用
+	println(m3())
+	//也可以重新赋值
+	println(m3(6,7))
+	//亦可以指定参数修改值
+	println(m3(b=9))
+		
+	
+	
+	

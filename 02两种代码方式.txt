@@ -1,0 +1,46 @@
+零、配置IDEA
+    1.下载插件
+        在 http://plugins.jetbrains.com/ 中搜索Scala，找到对应IDEA的版本下载
+    2.配置插件
+        File-->Settings-->Plugins-->Install Plugins from disk(即磁盘安装)
+        安装完成后重启即可
+    3.插件安装方法
+        将scala-intellij-bin-2018.2.4.zip解压后拷贝到IDEA/plugins的目录下，同样要重启
+
+
+一、创建scala项目
+	1.File-->New-->Project 然后选择 Scala--IDEA-->Next
+	2.创建工程名，工程路径
+	3.在src下面创建一个包packet，以及一个scala class
+	
+
+
+二、使用maven
+	1.正常创建maven项目
+		完成后在工程->src->main中创建一个scala文件夹，
+		然后将其改为资源文件夹(蓝色)(可在项目右键open module settings中更改)
+		
+	2.导入scala插件
+		项目右键open module settings -> Libraries -> + -> scala SDK
+		-> 一定选择System系统的 -> 当前工程-> OK ->  右键即可创建ScalaClass
+
+	3.代码种类
+		只要是想执行，想看见效果，就要用Object，
+		如果要做类的描述，就要用class。
+	
+	4.在pom.xml加入以下配置
+		<properties>
+			<maven.compiler.source>1.7</maven.compiler.source>
+			<maven.compiler.target>1.7</maven.compiler.target>
+			<encoding>UTF-8</encoding>
+			<scala.version>2.10.6</scala.version>
+			<scala.compat.version>2.10</scala.compat.version>
+		</properties>
+		<dependencies>
+			<dependency>
+				<groupId>org.scala-lang</groupId>
+				<artifactId>scala-library</artifactId>
+				<version>${scala.version}</version>
+			</dependency>
+		</dependencies>
+

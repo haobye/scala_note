@@ -1,0 +1,128 @@
+1.伴生类和伴生对象
+	存在一个class类，另有一个重名的object类，则object类就是class类的伴生类。
+	伴生类创建的对象的就是伴生对象。类和伴生类之间可以互相访问私有成员。
+	
+	class Animal {
+		var age = 1
+		private val name = "神兽"
+		def showName():String = {
+			var name1 = "羊驼"
+			name1
+		}
+	}
+	object Animal {
+		def showAnimal():Unit = {
+			var an = new Animal
+			an.age = 100
+			println(an.name)      //伴生类能访问到私有属性
+			an.showName
+		}
+	}
+	
+	
+2.apply和unapply
+	apply方法是注入方法,在类的伴生对象做一些初始操作
+	apply方法的参数列表不需要和构造器的参数类表统一
+	unapply方法是提取方法,使用unapply方法可以提取固定数量的对象或值
+		
+	class Dog(val name:String,val age:Int){}
+	
+	object Dog{
+		//注入方法(apply被隐式调用)
+		def apply(name:String,age:Int):Dog = {
+			//创建
+			new Dog(name,age)
+		}
+		//提取方法
+		//返回值必须是Option,有两个值:None,Some。
+		def unapply(dog:Dog):Option[(String,Int)] = {
+			if(dog == null){
+				None
+			}else{
+				Some(dog.name,dog.age)
+			}
+		}
+	}
+	
+	
+3.匹配模式
+	这种模式类似于java中的switch-case。
+	
+	val dog = Dog("小白",7)
+	dog match {
+		case Dog(name,age) => println("对象存在")
+		case _ => println("不存在")
+	}
+	
+	
+4.特质	
+	特质trait，相当于java接口。
+		* 特质比Java中接口更强大,与接口的不同在于特质中的方法可以实现
+		* 一般情况下,scala的类只能继承一个父类,但是可以继承多个接口
+		* 但是实际上,在Java8中也可以实现方法。
+	scala中的特质,除关键字不一样外,和class类中定义的是完全一样的
+	但是不能提供构造方法。
+	
+	trait Fly {
+		//声明有值属性
+		var height = 2000
+		//声明无值属性
+		val speed:String
+		//声明实现方法
+		def fly():String = {
+			"I can fly !"
+		}
+		//声明没有实现的方法
+		def play():String
+	}
+	
+	
+5.抽象类
+	使用abstract修饰抽象类
+	
+	abstract class QQ {	
+		//声明一个有值的字段
+		val age = 5
+		//声明一个无值的字段
+		val name:String
+		//声明实现的方法
+		def show():String = {
+			"QQQQ"
+		}
+		//声明没有实现的方法
+		def run():String
+	}
+	
+	
+6.继承特质和抽象类
+	extends可以继承抽象类和其他类，没有时也可以直接继承特质。
+	若继承类同时实现特质：
+		extends 类名 with 特质 with 特质
+	
+	class Human extends QQ with Fly {
+		//既能重写方法，也能重写属性		
+		override val name: String = "fly_name"
+		override def run(): String = "跑"
+		
+		//被var修饰的不能重写，执行时会报错
+		//override var height:Int = 99
+	}
+	
+	
+7.访问权限修饰符
+	只有一个，private私有的，其余都是public公有。
+	//修饰主构造方法，外部就不能访问了。
+	class Student private(name:String){}
+	//修饰成员变量，只能在当前和伴生类中访问。
+	private val name
+	//修饰类，保证当前类可以在什么位置访问
+	private[包名] class 类名
+	
+	
+8.关键字final和type	
+	final修饰的类不能继承；方法或属性不能重写；
+	type可以给数据类型添加别名。
+		//给String类型取个名字
+		val name:String = "小白"
+		type str = String
+		val name:str = "小黑"

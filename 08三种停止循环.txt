@@ -1,0 +1,46 @@
+1.使用Boolean变量
+	object BreakDemo{
+		def main(args:Array[String]):Unit = {			
+			//1.while循环直接使用Boolean变量
+			var flag = true
+			var n = 0
+			while(flag){
+				n += 1
+				println("n的值为："+n)
+				if(n == 10){
+					flag = false
+				}
+			}
+			
+			//2.for循环需使用守护
+			var flag = true
+			for(i <- 0 until 11 if flag){
+				println("i的值为"+i)
+				if(i == 7) flag = false
+			}
+			
+		}
+	}
+
+	
+2.使用return结束方法，可带回返回值	
+	def add():Unit = {
+		for(i <- 0 to 10){
+			if(i == 6){
+				return 
+			}
+			println("i的值是："+i)
+		}
+	}
+
+
+3.使用Break，没有关键字需要导包(_相当于*)
+	import scala.util.control.Breaks._
+	breakable{
+		for(i <- 0  until 11){
+			if(i == 7){
+				break
+			}
+		}
+	}
+

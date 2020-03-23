@@ -1,0 +1,88 @@
+1.面向对象
+	scala语言是一门面向函数编程的语言, 并且兼容面向对象的思想
+		Scala中类分为两种：描述类class，执行类object。
+	类不需要使用public修饰，一个文件可存在多个类。
+	
+	
+2.创建类	
+	class Student{
+		//var修饰的属性相当于自带get和set方法
+		//_表示占位符，可作为初始化使用。若使用_做初始值，必须声明数据类型。
+		//_有初始值(null和0),引用类型使用时需要注意空指针异常。
+		var name:String = _
+		var age:Int = _
+		//var add = _   这样是不可以的,无法确定类型
+		//val add:String = _	val相当于final,不可用下划线,因为那样无法赋值
+		val add:String = "花园"    
+		//val相当于只读,只能获取get,不能修改set；var可以get和set。
+	}
+	object Demo {
+		def main(args:Array[String]):Unit = {
+			//创建对象,可省略小括号
+			val stu = new Student()
+			//调用属性(取值)
+			println(stu.name)
+			//调用属性(赋值)
+			stu.age = 19
+		}
+	}
+	
+	
+3.构造方法	
+	1-在类名后面添加()完成构造方法
+	2-一个类只能有一个主构造方法, 可以有多个辅助构造方法
+	3-构造方法参数中不使用修饰,形参只能在类中使用;使用val或var修饰后,形参就可以在外部使用
+	4-在构造的时候,可以给属性一个默认值
+	
+	class Person(val name:String,var age:Int=15){
+		var gender:String = _
+		//提供辅助构造器
+		def this(name:String,age:Int,gender:String){
+			//第一行必须调用主构造方法
+			this(name,age)
+			this.gender = gender
+		}
+	}
+	object Demo{
+		def main(args:Array[String]):Unit = {
+			//创建对象
+			val p = new Person("浩",19)
+			
+		}
+	}
+	
+	
+4.单利对象
+	Scala中没有静态概念，所以需创建一个单利对象做程序入口，所以创建object类。
+	单利设计模式：懒汉和饿汉模式。
+	步骤：
+		1-构造方法要私有化
+		2-创建一个静态的属性当做类的类型(懒汉不做初始化)(饿汉进行初始化)
+		3-提供一个静态方法,返回值类型是当前类的类型
+		4.1-懒汉因为没有提供初始化,需要判断当前对象是否创建,若创建就直接返回对象,否则就创建对象并返回
+		4.2-饿汉因为已经创建完成,直接返回即可
+		5-需要注意：懒汉线程不安全需要加锁
+	
+	
+5.简单单利
+	1-私有构造方法
+	2-创建一个静态不可变的对象并初始化
+		public static final 类型 对象名 = new 类型()
+	3-枚举单利--enum{对象  方法}
+	
+	object SingleDemo{
+		//构建对象
+		private val inst = SingleDemo
+		//对外访问方法
+		def getInst = inst
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

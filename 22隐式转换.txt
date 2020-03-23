@@ -1,0 +1,21 @@
+1.隐式转换
+	其实就是添加一个关键字[implicit],这种转换是自动执行的,将一种类型转换为另一种类型
+		//定义隐式类：
+		implicit def m(x:Double) = x.toInt
+		val i:Int = 3.5
+
+
+2.隐式转换作用
+	//定义隐式类(可以把File类转换成隐式类RichFile)
+	implicit class RichFile(from:File){
+		def read:String = Source.fromFile(from.getPath).mkString
+		//mkString相当于Java中的toString方法
+	}
+	//使用隐式类做已有类的功能扩展。
+	val contents = new File("src/file.txt").read
+	println(contents)
+
+
+3.隐式类
+	隐式类只能定义在类、trait、object内部。
+
